@@ -11,6 +11,6 @@ action "Filter opened and synchronize events" {
 
 action "Run MVN tests" {
   needs = ["Filter opened and synchronize events"]
-  uses = "actions/bin/sh@master"
-   args = ["./mvnw test"]
+  uses = "uses = "LucaFeger/action-maven-cli@1.1.0"
+   args = ["clean test"]
 }
