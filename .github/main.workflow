@@ -1,6 +1,6 @@
 workflow "New workflow" {
   on = "pull_request"
-  resolves = ["Filters for GitHub Actions"]
+  resolves = ["Run MVN tests"]
 }
 
 action "filter-to-pr-open-synced" {
