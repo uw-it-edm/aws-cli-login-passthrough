@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1"/>
+    <title>UW AWS cli authentication</title>
+</head>
+<body>
+
+
+<div id="passthrough">
+    <h4>Authenticating</h4>
+    <div v-if="error">
+       Error while sending authentication to CLI : {{error}}
+    </div>
+
+    <div v-if="loaded">
+        Successfully sent authentication token to cli on port {{localPort}}
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"
+        integrity="sha256-e9WxLR4DOP5XKMT4mflXVovZS4mVdiMkAFSDHF+6q80="
+        crossorigin="anonymous"></script>
+<script th:inline="javascript">
+  const app = new Vue(
+    {
+      el: '#passthrough',
+      data: {
+        loaded: false,
+        error: null
+      },
+      mounted() {
+        const localPort = /*[[${localPort}]]*/ null;
+        const SAMLResponse = /*[[${SAMLResponse}]]*/ null;
+
+        const formData = new FormData();
+        formData.append('SAMLResponse', SAMLResponse);
+
+        this.$http.post('http://localhost:' + localPort,formData).then(response => {
+          this.loaded = true;
+          this.localPort = localPort;
+        }, response => {
+          this.error = JSON.stringify(response);
+        });
+      }
+    })
+</script>
+</body>
+</html>
