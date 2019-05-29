@@ -3,19 +3,14 @@ workflow "New workflow" {
   resolves = ["Run MVN tests"]
 }
 
-action "filter-to-pr-open-synced" {
+action "Filter opened and synchronize events" {
   uses = "actions/bin/filter@master"
   args = "action 'opened|synchronize'" 
 }
 
-action "List files" {
-  needs = ["filter-to-pr-open-synced"]
-  uses = "actions/bin/sh@master"
-   args = ["ls -lah"]
-}
 
 action "Run MVN tests" {
-  needs = ["List files"]
+  needs = ["Filter opened and synchronize events"]
   uses = "actions/bin/sh@master"
-   args = ["mvnw test"]
+   args = ["./mvnw test"]
 }
