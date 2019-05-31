@@ -14,7 +14,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>cli-login-passthrough</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Passthrough app to send a saml token through localhost</description>
 
     <properties>
         <java.version>1.8</java.version>

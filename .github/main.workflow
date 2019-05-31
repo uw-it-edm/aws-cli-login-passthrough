@@ -1,15 +1,16 @@
 workflow "New workflow" {
   on = "pull_request"
-  resolves = ["Filters for GitHub Actions"]
+  resolves = ["Run MVN tests"]
 }
 
-action "filter-to-pr-open-synced" {
+action "Filter opened and synchronize events" {
   uses = "actions/bin/filter@master"
   args = "action 'opened|synchronize'" 
 }
 
+
 action "Run MVN tests" {
-  needs = ["filter-to-pr-open-synced"]
-  uses = "actions/bin/sh@master"
-   args = ["mvnw test"]
+  needs = ["Filter opened and synchronize events"]
+  uses = "LucaFeger/action-maven-cli@1.1.0"
+  args = ["clean test"]
 }
