@@ -10,7 +10,7 @@
 <div id="passthrough">
     <h4>Authenticating</h4>
     <div v-if="error">
-       Error while sending authentication to CLI : {{error}}
+        Error while sending authentication to CLI : {{error}}
     </div>
 
     <div v-if="loaded">
@@ -36,10 +36,14 @@
         const localPort = /*[[${localPort}]]*/ null;
         const SAMLResponse = /*[[${SAMLResponse}]]*/ null;
 
-        const formData = new FormData();
-        formData.append('SAMLResponse', SAMLResponse);
+        const formData = {
+          SAMLResponse: SAMLResponse
+        };
 
-        this.$http.post('http://localhost:' + localPort,formData).then(response => {
+        console.log(JSON.stringify(formData));
+        this.$http.post('http://localhost:' + localPort, formData, {
+          emulateJSON: true
+        }).then(response => {
           this.loaded = true;
           this.localPort = localPort;
         }, response => {
