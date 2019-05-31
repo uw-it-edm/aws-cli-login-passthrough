@@ -1,5 +1,6 @@
 package edu.uw.aws.cliloginpassthrough.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -12,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Base64;
 import java.util.Objects;
 
+import edu.uw.aws.cliloginpassthrough.properties.PassthroughProperties;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,7 +24,12 @@ import lombok.extern.slf4j.Slf4j;
 public class PassthroughController {
 
 
-    public static final int DEFAULT_LOCAL_PORT = 8080;
+    private PassthroughProperties passthroughProperties;
+
+    @Autowired
+    public PassthroughController(PassthroughProperties passthroughProperties) {
+        this.passthroughProperties = passthroughProperties;
+    }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, value = "/passthrough")
     public String passthroughApp(
@@ -50,7 +57,7 @@ public class PassthroughController {
     }
 
     private int getLocalPort(String referer, Integer forcedLocalPort) {
-        int localPort = DEFAULT_LOCAL_PORT;
+        int localPort = passthroughProperties.getDefaultPort();
 
         if (forcedLocalPort != null) {
             localPort = forcedLocalPort;
@@ -62,6 +69,6 @@ public class PassthroughController {
     }
 
     private String getLocalPortFromReferer(String referer) {
-        return UriComponentsBuilder.fromHttpUrl(referer).build().getQueryParams().getFirst("localPort");
+        return UriComponentsBuilder.fromHttpUrl(referer).build().getQueryParams().getFirst(passthroughProperties.getLocalPortParamName());
     }
 }
